@@ -116,11 +116,11 @@ export const platformPositions = [
 
   // Elevation planks
   { x: 10600, y: CANVAS_HEIGHT - 320 },
-  { x: 10600, y: CANVAS_HEIGHT - 520 },
-  { x: 10600, y: CANVAS_HEIGHT - 720 },
+  { x: 10600, y: CANVAS_HEIGHT - 530 },
+  { x: 10600, y: CANVAS_HEIGHT - 740 },
   { x: 11200, y: CANVAS_HEIGHT - 320 },
-  { x: 11200, y: CANVAS_HEIGHT - 520 },
-  { x: 11200, y: CANVAS_HEIGHT - 720 },
+  { x: 11200, y: CANVAS_HEIGHT - 530 },
+  { x: 11200, y: CANVAS_HEIGHT - 740 },
 
   // platforms
   { x: 10900, y: CANVAS_HEIGHT - 100 },

@@ -16,13 +16,14 @@ class Bullet {
     verticalDirection = false,
     damage = 5,
     color,
+    speed = 10,
   }) {
     this.position = {
       x,
       y,
     };
     // speed of our bullet
-    this.speed = 15;
+    this.speed = speed;
 
     this.active = true;
     this.damage = damage;

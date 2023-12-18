@@ -143,6 +143,7 @@ class Player {
           verticalDirection: this.verticalDirection,
           damage: 100,
           color: 'pink',
+          speed: 20,
         })
       );
 
