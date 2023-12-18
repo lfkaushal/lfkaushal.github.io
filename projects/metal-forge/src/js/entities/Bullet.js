@@ -16,7 +16,7 @@ class Bullet {
     verticalDirection = false,
     damage = 5,
     color,
-    speed = 10,
+    speed = 5,
   }) {
     this.position = {
       x,
