@@ -68,8 +68,6 @@ class Game {
     this.explosions = [];
     this.enemySpawnIntervalId = null;
 
-    this.waveIncomingText = false;
-
     this.texts = {
       waveIncomingText: false,
       startText: true,
