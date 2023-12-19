@@ -16,7 +16,7 @@ class Bullet {
     verticalDirection = false,
     damage = 5,
     color,
-    speed = 5,
+    speed = 10,
   }) {
     this.position = {
       x,
@@ -63,7 +63,13 @@ class Bullet {
    */
   draw(c) {
     c.beginPath();
-    c.arc(this.position.x, this.position.y, 8, 0, 2 * Math.PI);
+    c.arc(
+      this.position.x + this.width,
+      this.position.y,
+      8,
+      0,
+      2 * Math.PI
+    );
     c.fillStyle = this.color;
     c.fill();
   }

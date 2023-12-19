@@ -70,6 +70,15 @@ class Game {
 
     this.waveIncomingText = false;
 
+    this.texts = {
+      waveIncomingText: false,
+      startText: true,
+    };
+
+    setTimeout(() => {
+      this.texts.startText = false;
+    }, 2000);
+
     this.audio = new Audio();
     this.audio.playBackgroundMusic();
 
@@ -209,7 +218,8 @@ class Game {
         if (this.scrollOffset > this.maxMoved)
           this.maxMoved = this.scrollOffset;
 
-        if (this.maxMoved >= 18500) this.waveIncomingText = true;
+        if (this.maxMoved >= 18500)
+          this.texts.waveIncomingText = true;
 
         this.platforms.forEach(
           (platform) => (platform.position.x -= this.player.speed)
@@ -243,7 +253,8 @@ class Game {
     this.showGameStats();
 
     // Show enemy wave text
-    if (this.waveIncomingText) {
+    c.save();
+    if (this.texts.waveIncomingText) {
       this.displayMessage(
         'Huge Wave Incoming!',
         CANVAS_WIDTH / 3.5,
@@ -251,6 +262,16 @@ class Game {
         5000
       );
     }
+
+    if (this.texts.startText) {
+      this.displayMessage(
+        'Go Player Go!',
+        CANVAS_WIDTH / 3,
+        CANVAS_HEIGHT / 2,
+        5000
+      );
+    }
+    c.restore();
   };
 
   /**
@@ -305,7 +326,7 @@ class Game {
 
     setTimeout(() => {
       this.clearMessage();
-      this.waveIncomingText = false;
+      this.texts.waveIncomingText = false;
     }, time);
   };
 
@@ -532,7 +553,7 @@ class Game {
    *
    */
   handleWin = () => {
-    if (this.player.score >= 1000) {
+    if (this.player.score >= 5000) {
       this.onGameOver();
     }
   };

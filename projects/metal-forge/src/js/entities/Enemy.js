@@ -68,7 +68,7 @@ export class Angler1 extends Enemy {
 
     this.width = 228;
     this.height = 169;
-    this.score = 10;
+    this.score = 15;
   }
 
   /**
@@ -260,7 +260,7 @@ export class Tower extends Enemy {
     this.cooldown = 2000; // Set the initial cooldown time (in milliseconds)
     this.lastShotTime = 0; // Record the time of the last shot
     this.health = 120;
-    this.score = 5;
+    this.score = 10;
   }
 
   /**
