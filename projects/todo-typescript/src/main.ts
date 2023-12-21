@@ -6,8 +6,15 @@ import circleComplete from './assets/icons/complete.svg';
 import listSvg from './assets/icons/list.svg';
 import { createImage } from './utils';
 
+enum Filters {
+  ALL,
+  COMPLETE,
+  INCOMPLETE,
+}
+
 // Get DOM Elements
 const taskListElement = document.querySelector('.tasks') as HTMLDivElement;
+// Modals
 const modal = document.querySelector('#modal') as HTMLDivElement;
 const modalOpener = document.querySelectorAll('.modal-opener');
 const modalCloser = document.querySelectorAll('.modal-closer');
@@ -15,9 +22,14 @@ const taskForm = document.querySelector('#add-task') as HTMLFormElement;
 const modalTaskForm = document.querySelector(
   '#modal-add-form',
 ) as HTMLFormElement;
+// Filter btns
+const allFilterBtns = document.querySelectorAll('.filter-all');
+const completeFilterBtns = document.querySelectorAll('.filter-complete');
+const incompleteFilterBtns = document.querySelectorAll('.filter-incomplete');
 
-// Intitialize Task Objects
+// Intitialize variables
 const taskList = new TaskList([]);
+let currentFilter = Filters.ALL;
 
 /**
  * create a new task instance and
@@ -121,7 +133,7 @@ function renderTasks(tasks: ITask[]) {
     // Add event listener to the toggle btn
     toggleBtn.addEventListener('click', () => {
       task.toggleCompleted();
-      renderTasks(taskList.list);
+      renderFilteredTasks();
     });
 
     actions.appendChild(toggleBtn);
@@ -158,8 +170,70 @@ function handleTaskSubmit(event: SubmitEvent) {
   handleModalClose();
 }
 
-function filterResult() {
-  let result = [];
+/**
+ * Render tasks based on the current filter
+ */
+function renderFilteredTasks() {
+  let filteredTasks: ITask[];
+
+  switch (currentFilter) {
+    case Filters.COMPLETE:
+      filteredTasks = taskList.list.filter((task) => task.completed);
+
+      break;
+    case Filters.INCOMPLETE:
+      filteredTasks = taskList.list.filter((task) => !task.completed);
+
+      break;
+    default:
+      filteredTasks = taskList.list;
+      break;
+  }
+
+  renderTasks(filteredTasks);
+}
+
+/**
+ * Handle filter button click
+ *
+ * @param filter The selected filter
+ */
+function handleFilterClick(filter: Filters) {
+  // Remove active class from the buttons
+  allFilterBtns.forEach((btn) => {
+    btn.classList.remove('header__menu-link--active');
+  });
+
+  completeFilterBtns.forEach((btn) => {
+    btn.classList.remove('header__menu-link--active');
+  });
+
+  incompleteFilterBtns.forEach((btn) => {
+    btn.classList.remove('header__menu-link--active');
+  });
+
+  currentFilter = filter;
+
+  // Add active class to the selected button
+  switch (currentFilter) {
+    case Filters.COMPLETE:
+      completeFilterBtns.forEach((btn) =>
+        btn.classList.add('header__menu-link--active'),
+      );
+      break;
+    case Filters.INCOMPLETE:
+      incompleteFilterBtns.forEach((btn) =>
+        btn.classList.add('header__menu-link--active'),
+      );
+      break;
+    default:
+      allFilterBtns.forEach((btn) =>
+        btn.classList.add('header__menu-link--active'),
+      );
+      break;
+  }
+
+  renderFilteredTasks();
 }
 
 /**
@@ -200,6 +274,25 @@ function setupEventListeners() {
   // Handle when modal closes
   modalCloser.forEach((closer) => {
     closer.addEventListener('click', handleModalClose);
+  });
+
+  // handle when filter button is clicked
+  allFilterBtns.forEach((allFilterBtn) => {
+    allFilterBtn.addEventListener('click', () => {
+      handleFilterClick(Filters.ALL);
+    });
+  });
+
+  completeFilterBtns.forEach((completeFilterBtn) => {
+    completeFilterBtn.addEventListener('click', () =>
+      handleFilterClick(Filters.COMPLETE),
+    );
+  });
+
+  incompleteFilterBtns.forEach((incompleteFilterBtn) => {
+    incompleteFilterBtn.addEventListener('click', () =>
+      handleFilterClick(Filters.INCOMPLETE),
+    );
   });
 }
 
