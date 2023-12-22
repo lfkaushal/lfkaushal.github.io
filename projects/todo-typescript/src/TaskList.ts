@@ -23,8 +23,12 @@ interface ITaskList {
   render: () => void;
 }
 
+// Get the task list container
 const taskListElement = document.querySelector('.tasks') as HTMLDivElement;
 
+/**
+ * The list of the Task
+ */
 class TaskList implements ITaskList {
   list: ITask[];
   filter: Filters;
@@ -73,16 +77,29 @@ class TaskList implements ITaskList {
     this.filter = filter;
   }
 
+  /**
+   * get the task by id
+   *
+   * @param id id of the task
+   * @returns Task object
+   */
   getTaskById = (id: string) => {
     return this.list.find((item) => item.id === id) || null;
   };
 
+  /**
+   * get the task by index
+   *
+   * @param index index of the task
+   * @returns task object
+   */
   getTaskByIndex = (index: number) => {
     return this.list[index] || null;
   };
 
   /**
    * add a task to the list
+   *
    * @param task
    */
   addTask = (task: ITask) => {
@@ -99,6 +116,10 @@ class TaskList implements ITaskList {
     return this.list;
   };
 
+  /**
+   * Render the empty list
+   *
+   */
   renderEmptyList = () => {
     const tasksEmpty = document.createElement('div');
     tasksEmpty.classList.add('tasks-empty');
@@ -124,6 +145,11 @@ class TaskList implements ITaskList {
     taskListElement.appendChild(tasksEmpty);
   };
 
+  /**
+   * render list of task into the DOM
+   *
+   * @returns Task Wrapper DOM
+   */
   render() {
     taskListElement.innerHTML = '';
     const currentFilter = this.getFilter();

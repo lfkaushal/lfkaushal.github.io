@@ -11,6 +11,10 @@ export interface ITask {
   getCompleted: () => boolean;
 }
 
+/**
+ * Our Task class
+ *
+ */
 class Task implements ITask {
   id: string;
   title: string;
@@ -31,14 +35,29 @@ class Task implements ITask {
     this.completed = completed;
   }
 
+  /**
+   * toggle the complete status of
+   * the task
+   *
+   */
   toggleCompleted = () => {
     this.completed = !this.completed;
   };
 
+  /**
+   * set the completed status for the given task
+   *
+   * @param completed
+   */
   setCompleted = (completed: boolean = true) => {
     this.completed = completed;
   };
 
+  /**
+   * get the status of the task
+   *
+   * @returns status of the task
+   */
   getCompleted = () => {
     return this.completed;
   };
