@@ -24,7 +24,9 @@ interface ITaskList {
 }
 
 // Get the task list container
-const taskListElement = document.querySelector('.tasks') as HTMLDivElement;
+const taskListElement = document.querySelector(
+  '.tasks',
+) as HTMLDivElement;
 
 /**
  * The list of the Task
@@ -138,7 +140,8 @@ class TaskList implements ITaskList {
 
     const emptyText = document.createElement('p');
     emptyText.classList.add('tasks-empty__text');
-    emptyText.textContent = 'You don\'t have any tasks yet. Create a new one.';
+    emptyText.textContent =
+      "You don't have any tasks yet. Create a new one.";
 
     tasksEmpty.appendChild(emptyText);
 
@@ -156,23 +159,25 @@ class TaskList implements ITaskList {
     let filteredTasks: ITask[] = [];
 
     switch (currentFilter) {
-    case Filters.COMPLETE:
-      filteredTasks = this.list.filter((task) => task.completed);
-      break;
-    case Filters.INCOMPLETE:
-      filteredTasks = this.list.filter((task) => !task.completed);
-      break;
-    case Filters.SEARCH:
-      if (this.getQuery() === '') {
+      case Filters.COMPLETE:
+        filteredTasks = this.list.filter((task) => task.completed);
+        break;
+      case Filters.INCOMPLETE:
+        filteredTasks = this.list.filter((task) => !task.completed);
+        break;
+      case Filters.SEARCH:
+        if (this.getQuery() === '') {
+          filteredTasks = this.list;
+        }
+        filteredTasks = this.list.filter((task) =>
+          task.title
+            .toLowerCase()
+            .includes(this.getQuery().toLowerCase()),
+        );
+        break;
+      default:
         filteredTasks = this.list;
-      }
-      filteredTasks = this.list.filter((task) =>
-        task.title.toLowerCase().includes(this.getQuery()),
-      );
-      break;
-    default:
-      filteredTasks = this.list;
-      break;
+        break;
     }
 
     if (filteredTasks.length === 0) {
