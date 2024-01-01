@@ -1,4 +1,4 @@
-import type { Task } from '../types/task';
+import type { Task } from '../interface/task';
 
 let tasks: Task[] = [
   {
@@ -26,9 +26,6 @@ export const getTaskById = (id: string) =>
 export const getTasks = () => tasks;
 
 export const addTask = (task: Task) => {
-  if (!task.title) {
-    throw new Error('Task title is required.');
-  }
   tasks.push(task);
 };
 

@@ -1,6 +1,6 @@
 // services/task.js
 import * as modelTask from '../model/task';
-import type { Task } from '../types/task';
+import type { Task } from '../interface/task';
 
 export const getTasks = () => {
   try {

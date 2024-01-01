@@ -19,110 +19,97 @@ export const getTasks = (req: Request, res: Response) => {
 };
 
 export const createTask = (req: Request, res: Response) => {
-  try {
-    const data = req.body;
+  const data = req.body;
 
-    // Check if required data is present
-    if (!data || !data.title) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid request. Task title is required.',
-      });
-    }
+  const { title, description } = data;
 
-    const result = taskService.createTask(data);
+  if (!title) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
 
-    if (result.success) {
-      return res.json({
-        success: true,
-        message: 'Task created.',
-      });
-    } else {
-      return res.status(500).json({
-        success: false,
-        message: result.error || 'Cannot create task',
-      });
-    }
-  } catch (error) {
-    // Handle unexpected errors
-    console.error('Error creating task:', error);
+  if (title.trim().length === 0) {
+    return res.status(400).json({ error: 'Title cannot be empty' });
+  }
+
+  if (description && description.trim().length === 0) {
+    return res
+      .status(400)
+      .json({ error: 'Description cannot be empty' });
+  }
+
+  const result = taskService.createTask(data);
+
+  if (result.success) {
+    return res.json({
+      success: true,
+      message: 'Task created.',
+    });
+  } else {
     return res.status(500).json({
       success: false,
-      message: 'Internal Server Error',
+      message: result.error || 'Cannot create task',
     });
   }
 };
 
 export const editTask = (req: Request, res: Response) => {
-  try {
-    const updatedTaskData = req.body;
-    const taskId = req.params.id;
+  const updatedTaskData = req.body;
+  const taskId = req.params.id;
 
-    if (!taskId || !updatedTaskData) {
-      return res.status(400).json({
-        success: false,
-        message:
-          'Invalid request. Task ID and updated task data are required.',
-      });
-    }
+  const { title, description } = updatedTaskData;
 
-    const result = taskService.editTask({
-      id: taskId,
-      ...updatedTaskData,
+  if (!title || !taskId) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+
+  if (title.trim().length === 0) {
+    return res.status(400).json({ error: 'Title cannot be empty' });
+  }
+
+  if (description && description.trim().length === 0) {
+    return res
+      .status(400)
+      .json({ error: 'Description cannot be empty' });
+  }
+
+  const result = taskService.editTask({
+    id: taskId,
+    ...updatedTaskData,
+  });
+
+  if (result.success) {
+    return res.json({
+      success: true,
+      message: 'Task updated.',
     });
-
-    if (result.success) {
-      return res.json({
-        success: true,
-        message: 'Task updated.',
-      });
-    } else {
-      return res.status(500).json({
-        success: false,
-        message: result.error || 'Cannot update task',
-      });
-    }
-  } catch (error) {
-    // Handle unexpected errors
-    console.error('Error updating task:', error);
+  } else {
     return res.status(500).json({
       success: false,
-      message: 'Error updating task',
+      message: result.error || 'Cannot update task',
     });
   }
 };
 
 export const deleteTask = (req: Request, res: Response) => {
-  try {
-    const taskId = req.params.id;
-    console.log('Controller, ', taskId);
+  const taskId = req.params.id;
 
-    if (!taskId) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid request. Task ID is required.',
-      });
-    }
+  const result = taskService.deleteTask(taskId);
 
-    const result = taskService.deleteTask(taskId);
-
-    if (result.success) {
-      return res.json({
-        success: true,
-        message: 'Task deleted.',
-      });
-    } else {
-      return res.status(404).json({
-        success: false,
-        message: result.error || 'Task not found.',
-      });
-    }
-  } catch (error) {
-    // Handle unexpected errors
-    console.error('Error deleting task:', error);
-    return res.status(500).json({
+  if (!taskId)
+    return res.status(401).json({
       success: false,
-      message: 'Cannot delete task',
+      message: result.error,
+    });
+
+  if (result.success) {
+    return res.json({
+      success: true,
+      message: 'Task deleted.',
+    });
+  } else {
+    return res.status(404).json({
+      success: false,
+      message: result.error || 'Task not found.',
     });
   }
 };
