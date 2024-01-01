@@ -4,18 +4,7 @@ This is a simple Tasks backend application built using Node.js and Express. It p
 
 ### Installation
 
-1. Clone the repository:
-
-```bash
-git clone https://github.com/your-username/todo-backend.git
-cd todo-backend
-```
-
-2. Install Dependencies:
-
-```bash
-npm install
-```
+`docker compose up`
 
 ### Confguration
 
