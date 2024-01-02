@@ -7,13 +7,16 @@ import {
   deleteTask,
 } from '../controller/task';
 
+import { validateReqQuery } from '../middleware/validator';
+import { taskSchema } from '../schema/task';
+
 const router = Router();
 
 router.get('/', getTasks);
 
-router.post('/', createTask);
+router.post('/', validateReqQuery(taskSchema), createTask);
 
-router.put('/:id', editTask);
+router.put('/:id', validateReqQuery(taskSchema), editTask);
 
 router.delete('/:id', deleteTask);
 

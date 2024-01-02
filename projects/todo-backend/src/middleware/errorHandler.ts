@@ -4,6 +4,7 @@ import { NextFunction, Request, Response } from 'express';
 import UnauthenticatedError from '../error/UnauthenticatedError';
 
 import loggerWithNameSpace from '../utils/logger';
+import BadRequestError from '../error/BadRequestError';
 
 const logger = loggerWithNameSpace('ErrorHandler');
 
@@ -28,6 +29,13 @@ export function genericErrorHandler(
       .status(HttpStatus.UNAUTHORIZED)
       .json({ message: err.message });
   }
+
+  if (err instanceof BadRequestError) {
+    return res
+      .status(HttpStatus.BAD_REQUEST)
+      .json({ message: err.message });
+  }
+
   return res
     .status(HttpStatus.INTERNAL_SERVER_ERROR)
     .json({ message: err.message });
