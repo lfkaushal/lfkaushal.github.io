@@ -13,7 +13,6 @@ import {
   ACCESS_TOKEN_EXPIRY,
   REFRESH_TOKEN_EXPIRY,
 } from '../constant';
-import { getRandomString } from '../utils';
 import { User } from '../interface/user';
 
 const SALT_ROUNDS = 10;

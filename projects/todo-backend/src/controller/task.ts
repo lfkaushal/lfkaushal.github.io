@@ -21,9 +21,9 @@ export const getTasks = (req: Request, res: Response) => {
 export const createTask = (req: Request, res: Response) => {
   const data = req.body;
 
-  const { title, description } = data;
+  const { id, title, description } = data;
 
-  if (!title) {
+  if (!id || !title) {
     return res.status(400).json({ error: 'All fields are required' });
   }
 
