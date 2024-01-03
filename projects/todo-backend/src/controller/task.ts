@@ -1,115 +1,78 @@
 // controllers/taskController.js
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import * as taskService from '../service/task';
+import { ITask } from '../interface/task';
 
-export const getTasks = (req: Request, res: Response) => {
-  const result = taskService.getTasks();
+export const getAll = async (_req: Request, res: Response) => {
+  const data = await taskService.getAll();
 
-  if (result.success) {
-    return res.json({
-      success: true,
-      data: result.data,
-    });
-  } else {
-    return res.status(500).json({
-      success: false,
-      message: result.error || 'Problem fetching tasks.',
-    });
-  }
-};
-
-export const createTask = (req: Request, res: Response) => {
-  const data = req.body;
-
-  const { id, title, description } = data;
-
-  if (!id || !title) {
-    return res.status(400).json({ error: 'All fields are required' });
-  }
-
-  if (title.trim().length === 0) {
-    return res.status(400).json({ error: 'Title cannot be empty' });
-  }
-
-  if (description && description.trim().length === 0) {
-    return res
-      .status(400)
-      .json({ error: 'Description cannot be empty' });
-  }
-
-  const result = taskService.createTask(data);
-
-  if (result.success) {
-    return res.json({
-      success: true,
-      message: 'Task created.',
-    });
-  } else {
-    return res.status(500).json({
-      success: false,
-      message: result.error || 'Cannot create task',
-    });
-  }
-};
-
-export const editTask = (req: Request, res: Response) => {
-  const updatedTaskData = req.body;
-  const taskId = req.params.id;
-
-  const { title, description } = updatedTaskData;
-
-  if (!title || !taskId) {
-    return res.status(400).json({ error: 'All fields are required' });
-  }
-
-  if (title.trim().length === 0) {
-    return res.status(400).json({ error: 'Title cannot be empty' });
-  }
-
-  if (description && description.trim().length === 0) {
-    return res
-      .status(400)
-      .json({ error: 'Description cannot be empty' });
-  }
-
-  const result = taskService.editTask({
-    id: taskId,
-    ...updatedTaskData,
+  return res.json({
+    data,
   });
+};
 
-  if (result.success) {
+export const getById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const id = Number(req.params.id);
+
+    const data = await taskService.getById(id);
+
     return res.json({
-      success: true,
-      message: 'Task updated.',
+      data,
     });
-  } else {
-    return res.status(500).json({
-      success: false,
-      message: result.error || 'Cannot update task',
-    });
+  } catch (error) {
+    next(error);
   }
 };
 
-export const deleteTask = (req: Request, res: Response) => {
-  const taskId = req.params.id;
+export const updateTask = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const id = Number(req.params.id);
+    const body = req.body;
+    const data = await taskService.update(id, body);
 
-  const result = taskService.deleteTask(taskId);
+    return res.json({ data });
+  } catch (error) {
+    next(error);
+  }
+};
 
-  if (!taskId)
-    return res.status(401).json({
-      success: false,
-      message: result.error,
-    });
+export const createTask = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const body: ITask = req.body;
 
-  if (result.success) {
-    return res.json({
-      success: true,
-      message: 'Task deleted.',
-    });
-  } else {
-    return res.status(404).json({
-      success: false,
-      message: result.error || 'Task not found.',
-    });
+    const task = await taskService.create(body);
+
+    return res.json({ message: 'Task successully created' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteTask = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const id = Number(req.params.id);
+
+    const data = await taskService.deleteTask(id);
+
+    return res.json({ message: 'Task successfully deleted' });
+  } catch (error) {
+    next(error);
   }
 };

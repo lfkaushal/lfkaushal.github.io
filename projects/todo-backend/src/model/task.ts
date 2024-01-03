@@ -1,54 +1,44 @@
-import type { Task } from '../interface/task';
+import type { ITask } from '../interface/task';
 
-let tasks: Task[] = [
-  {
-    id: '1',
-    title: 'Task one',
-    description: 'Task description',
-    completed: false,
-  },
-  {
-    id: '2',
-    title: 'Task Two',
-    completed: false,
-  },
-  {
-    id: '3',
-    title: 'Task Three',
-    description: 'Task description',
-    completed: true,
-  },
-];
+import BaseModel from './BaseModel';
 
-export const getTaskById = (id: string) =>
-  tasks.find(({ id: taskId }) => taskId === id);
-
-export const getTasks = () => tasks;
-
-export const addTask = (task: Task) => {
-  tasks.push(task);
-};
-
-export const editTask = (updatedTask: Task) => {
-  const index = tasks.findIndex(({ id }) => id === updatedTask.id);
-
-  if (index !== -1) {
-    // Update the existing task with the provided data
-    tasks[index] = {
-      ...tasks[index],
-      ...updatedTask,
-    };
-  } else {
-    throw new Error('Task not found');
+export default class TaskModel extends BaseModel {
+  static async getAll() {
+    return this.queryBuilder()
+      .select({
+        id: 'id',
+        title: 'title',
+        description: 'description',
+        completed: 'completed',
+      })
+      .from('tasks');
   }
-};
 
-export const deleteTask = (id: string) => {
-  const index = tasks.findIndex((task) => task.id === id);
-
-  if (index !== -1) {
-    tasks.splice(index, 1);
-  } else {
-    throw new Error('Task not found');
+  static async getById(id: number) {
+    return this.queryBuilder()
+      .select({
+        id: 'id',
+        title: 'title',
+        description: 'description',
+        completed: 'completed',
+      })
+      .from('tasks')
+      .where({ id })
+      .first();
   }
-};
+
+  static async create(task: ITask) {
+    return this.queryBuilder().insert(task).table('tasks');
+  }
+
+  static async update(id: number, task: ITask) {
+    return this.queryBuilder()
+      .update(task)
+      .table('tasks')
+      .where({ id });
+  }
+
+  static async delete(id: number) {
+    return this.queryBuilder().table('tasks').where({ id }).del();
+  }
+}
