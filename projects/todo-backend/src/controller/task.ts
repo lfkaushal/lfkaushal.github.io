@@ -1,14 +1,16 @@
 // controllers/taskController.js
 import { NextFunction, Request, Response } from 'express';
 import * as taskService from '../service/task';
-import { ITask } from '../interface/task';
+import { IGetAllTasksQuery, ITask } from '../interface/task';
 
-export const getAll = async (_req: Request, res: Response) => {
-  const data = await taskService.getAll();
+export const getAll = async (req: Request, res: Response) => {
+  const query = req.query;
 
-  return res.json({
-    data,
-  });
+  const data = await taskService.getAll(
+    query as unknown as IGetAllTasksQuery
+  );
+
+  return res.json(data);
 };
 
 export const getById = async (

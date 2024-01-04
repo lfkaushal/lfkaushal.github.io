@@ -1,49 +1,30 @@
-// // services/task.js
-// import * as modelTask from '../model/task';
-// import type { ITask } from '../interface/task';
-
-// export const getTasks = () => {
-//   try {
-//     const data = modelTask.getTasks();
-//     return { success: true, data };
-//   } catch (error) {
-//     return { success: false, error: 'Error retrieving tasks.' };
-//   }
-// };
-
-// export const createTask = (task: ITask) => {
-//   try {
-//     modelTask.addTask(task);
-//     return { success: true };
-//   } catch (error) {
-//     return { success: false, error: 'Error creating task.' };
-//   }
-// };
-
-// export const editTask = (updatedTask: Task) => {
-//   try {
-//     modelTask.editTask(updatedTask);
-//     return { success: true };
-//   } catch (error) {
-//     return { success: false, error: 'Error updating task.' };
-//   }
-// };
-
-// export const deleteTask = (taskId: string) => {
-//   try {
-//     modelTask.deleteTask(taskId);
-//     return { success: true };
-//   } catch (error) {
-//     return { success: false, error: 'Error deleting task.' };
-//   }
-// };
-import { ITask } from '../interface/task';
+import { IGetAllTasksQuery, ITask } from '../interface/task';
 import TaskModel from '../model/task';
+import { buildMeta, getPaginationOptions } from '../utils/pagination';
 
-export const getAll = async () => {
-  const data = await TaskModel.getAll();
+export const getAll = async (query: IGetAllTasksQuery) => {
+  const { page, size } = query;
 
-  return data;
+  const pageDetails = getPaginationOptions({ page, size });
+
+  const tasksPromise = TaskModel.getAll({
+    ...pageDetails,
+    ...query,
+  });
+  const countPromise = TaskModel.countAll(query);
+
+  const [tasks, count] = await Promise.all([
+    tasksPromise,
+    countPromise,
+  ]);
+
+  const total = count.count;
+  const meta = buildMeta(total, size, page);
+
+  return {
+    data: tasks,
+    meta,
+  };
 };
 
 export const getById = async (id: number) => {
