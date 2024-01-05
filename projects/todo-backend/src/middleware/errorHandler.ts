@@ -5,14 +5,9 @@ import UnauthenticatedError from '../error/UnauthenticatedError';
 
 import loggerWithNameSpace from '../utils/logger';
 import BadRequestError from '../error/BadRequestError';
+import NotFoundError from '../error/NotFoundError';
 
 const logger = loggerWithNameSpace('ErrorHandler');
-
-export function notFoundError(_req: Request, res: Response) {
-  return res.status(HttpStatus.NOT_FOUND).json({
-    message: HttpStatus.getStatusText(HttpStatus.NOT_FOUND),
-  });
-}
 
 export function genericErrorHandler(
   err: Error,
@@ -34,6 +29,12 @@ export function genericErrorHandler(
     return res
       .status(HttpStatus.BAD_REQUEST)
       .json({ message: err.message });
+  }
+
+  if (err instanceof NotFoundError) {
+    return res.status(HttpStatus.NOT_FOUND).json({
+      message: HttpStatus.getStatusText(HttpStatus.NOT_FOUND),
+    });
   }
 
   return res
