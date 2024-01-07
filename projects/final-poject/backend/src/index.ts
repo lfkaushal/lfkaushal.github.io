@@ -3,11 +3,19 @@ import express from 'express';
 import config from './config';
 
 import routes from './routes';
-import { AppDataSource } from './data-source';
+import { logger } from './middleware/logger';
+import { AppDataSource } from './database/data-source';
+import { genericErrorHandler } from './middleware/errorHandler';
 
 const app = express();
 
+app.use(express.json());
+
+app.use(logger);
+
 app.use(routes);
+
+app.use(genericErrorHandler);
 
 const main = async () => {
   try {
