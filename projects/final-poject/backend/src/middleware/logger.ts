@@ -5,7 +5,7 @@ const loggerFn = loggerWithNameSpace('Logger');
 
 export const logger = async (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction,
 ) => {
   loggerFn.info(`${req.method}: ${req.path}`);

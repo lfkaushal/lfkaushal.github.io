@@ -8,7 +8,9 @@
     "eslint": "eslint . --ext .ts",
     "eslint:fix": "eslint . --ext .ts --fix",
     "prettify": "prettier --write src/**/*.ts",
-    "prettify:check": "prettier --check src/**/*.ts"
+    "prettify:check": "prettier --check src/**/*.ts",
+    "migration:create": "npx typeorm migration:create ./src/migration/",
+    "migration:generate": "npx ts-node ./node_modules/.bin/typeorm migration:generate ./src/migration/$name -d ./src/data-source.ts"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +22,7 @@
     "@typescript-eslint/parser": "^6.18.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
+    "nodemon": "^3.0.2",
     "prettier": "3.1.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
@@ -27,6 +30,10 @@
   "dependencies": {
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.3",
+    "reflect-metadata": "^0.2.1",
+    "typeorm": "^0.3.19",
     "winston": "^3.11.0"
   }
 }
