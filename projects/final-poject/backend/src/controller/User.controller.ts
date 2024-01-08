@@ -1,14 +1,14 @@
 import HttpStatus from 'http-status-codes';
 import { NextFunction, Request, Response } from 'express';
-import AuthService from '../service/Auth.service';
+import UserService from '../service/User.service';
 import { ILogin, ISignup } from '../interface/auth';
 
-class AuthController {
+class UserController {
   static async signup(req: Request, res: Response, next: NextFunction) {
     try {
       const body: ISignup = req.body;
 
-      const { message, data } = await AuthService.signup(body);
+      const { message, data } = await UserService.signup(body);
       return res.status(HttpStatus.CREATED).json({
         message,
         data,
@@ -22,7 +22,7 @@ class AuthController {
     try {
       const body: ILogin = req.body;
 
-      const data = await AuthService.login(body);
+      const data = await UserService.login(body);
 
       return res.json(data);
     } catch (error) {
@@ -38,7 +38,7 @@ class AuthController {
         .json({ message: 'Refresh token is missing' });
     }
     try {
-      const accessToken = await AuthService.refreshToken(refreshToken);
+      const accessToken = await UserService.refreshToken(refreshToken);
       return res
         .status(HttpStatus.ACCEPTED)
         .json({ success: true, accessToken });
@@ -48,4 +48,4 @@ class AuthController {
   }
 }
 
-export default AuthController;
+export default UserController;

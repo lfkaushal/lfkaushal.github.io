@@ -1,6 +1,5 @@
 import { Column, Entity } from 'typeorm';
 import BaseModel from './BaseModel';
-import { IsEmail } from 'class-validator';
 
 @Entity('User')
 class User extends BaseModel {
@@ -8,7 +7,6 @@ class User extends BaseModel {
   username: string;
 
   @Column({ unique: true })
-  @IsEmail()
   email: string;
 
   @Column()
